@@ -1,0 +1,96 @@
+@use "tokens";
+@use "host";
+@use "auth";
+@use "wizard";
+@use "widget";
+@use "backoffice";
+
+:root {
+  @include tokens.theme-vars();
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+input,
+select,
+textarea,
+.form-control,
+.form-selector {
+  border-radius: 999px;
+}
+
+.btn {
+  border-radius: 999px;
+  padding: 12px 22px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.txt-light {
+  font-weight: 400;
+}
+
+.bot-advice {
+  color: var(--bot-advice) !important;
+}
+
+.btn:hover {
+  background: var(--hover-buttons);
+  border-color: var(--hover-buttons);
+  color: var(--ink-light);
+  transform: translateY(-1px);
+}
+
+.btn.btn-primary {
+  background: var(--accent-strong);
+  color: var(--ink-light);
+  border-color: var(--accent-strong);
+  box-shadow: var(--shadow);
+}
+
+.btn.btn-secondary {
+  background: var(--ink-light);
+  color: var(--ink-dark);
+  border-color: var(--ink-light);
+  box-shadow: var(--shadow);
+}
+
+.btn.btn-tertiary {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.btn.btn-tertiary.btn-tertiary-light {
+  color: var(--ink-light);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.btn.btn-tertiary.btn-tertiary-dark {
+  color: var(--ink-dark);
+  border-color: var(--ink-dark);
+}
+
+.btn-small {
+  padding: 4px 8px;
+  font-size: 0.65rem;
+}
+
+.form-control-small {
+  padding: 4px 8px;
+  font-size: 0.75rem;
+}

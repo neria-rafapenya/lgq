@@ -1,0 +1,20 @@
+@mixin theme-vars($panel-max-height: calc(100vh - 140px)) {
+  --bg: #f6f1ea;
+  --bg-2: #e9e1d4;
+  --ink: #1f1d1b;
+  --ink-dark: #0e0d0b;
+  --ink-light: #f1f1f1;
+  --muted: #6f6358;
+  --accent: #3e3e3e;
+  --accent-strong: #242424;
+  --accent-soft: rgba(42, 125, 114, 0.18);
+  --card: #fff9f2;
+  --line: rgba(90, 80, 68, 0.18);
+  --shadow: 0 24px 60px rgba(20, 14, 8, 0.15);
+  --warn: #c26c34;
+  --panel-max-height: #{$panel-max-height};
+  --font-heading: "Libre Baskerville", "Inter", serif;
+  --font-heading2: "Libre Baskerville", "Inter", serif;
+  --font-heading3: "Inter", serif;
+  --font-body: "Work Sans", sans-serif;
+}

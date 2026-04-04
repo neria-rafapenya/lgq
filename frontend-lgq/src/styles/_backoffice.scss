@@ -1,0 +1,323 @@
+.backoffice-shell {
+  min-height: 100vh;
+  padding: 32px 48px;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.backoffice-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.backoffice-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+}
+
+.backoffice-card {
+  max-width: 520px;
+  margin: 0 auto;
+  background: var(--card);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.backoffice-catalog {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+}
+
+.backoffice-catalog__sidebar {
+  background: var(--card);
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  height: fit-content;
+}
+
+.backoffice-catalog__sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  gap: 8px;
+}
+
+.backoffice-catalog__sidebar button {
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 8px 10px;
+  border-radius: 12px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.backoffice-catalog__sidebar button.is-active {
+  border-color: var(--hover-buttons);
+  color: var(--ink-dark);
+  background: rgba(194, 108, 52, 0.12);
+}
+
+.backoffice-catalog__content header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.backoffice-status {
+  color: var(--warn);
+  font-size: 0.85rem;
+}
+
+.backoffice-forms {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.backoffice-form {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.backoffice-form__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.backoffice-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.backoffice-label {
+  font-family: Verdana, sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.backoffice-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.backoffice-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.backoffice-list {
+  display: grid;
+  gap: 16px;
+}
+
+.backoffice-item {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.backoffice-item__fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.backoffice-thumb {
+  grid-column: 1 / -1;
+  width: 120px;
+  height: 90px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.backoffice-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.backoffice-item__fields textarea {
+  grid-column: 1 / -1;
+  border-radius: 16px;
+  min-height: 80px;
+}
+
+.backoffice-image-field {
+  display: block;
+}
+
+.backoffice-item__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.backoffice-item__header span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.backoffice-item__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.backoffice-item__toggle {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.backoffice-item__toggle svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--ink);
+  stroke-width: 2;
+  fill: none;
+}
+
+.backoffice-item__toggle:hover {
+  background: var(--accent-soft);
+}
+
+.backoffice-variants {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.backoffice-variant {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+
+.backoffice-variant__thumb {
+  width: 100%;
+  max-width: 160px;
+  height: 90px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.backoffice-variant__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.backoffice-variant__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 6px;
+  margin-top: 8px;
+}
+
+
+.backoffice-variant span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.backoffice-hint {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.backoffice-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 1400;
+}
+
+.backoffice-modal__panel {
+  background: var(--card);
+  border-radius: 24px;
+  padding: 20px;
+  width: min(560px, 92vw);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: var(--shadow);
+}
+
+.backoffice-modal__panel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+@media (max-width: 960px) {
+  .backoffice-catalog {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1200px) {
+  .backoffice-variants {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .backoffice-variants {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .backoffice-variants {
+    grid-template-columns: 1fr;
+  }
+}

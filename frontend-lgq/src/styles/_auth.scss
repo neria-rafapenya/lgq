@@ -1,0 +1,101 @@
+@use "tokens" as *;
+
+.auth-screen {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-card {
+  width: min(520px, 100%);
+  background: var(--back-login);
+  color: var(--ink-light);
+  border-radius: 28px;
+  padding: 32px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-card h2 {
+  margin: 0;
+  font-family: var(--font-heading2);
+  font-size: 1.9rem;
+  font-weight: 300;
+}
+
+.auth-card p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-light);
+}
+
+.auth-card--loading,
+.auth-card--success {
+  align-items: center;
+  text-align: center;
+}
+
+.auth-panel {
+  animation: authSwap 0.22s ease;
+  transform-origin: center top;
+}
+
+@keyframes authSwap {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+}
+
+.grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.status {
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 400;
+}
+
+.status.error {
+  background: var(--back-error);
+  color: #fff;
+}
+
+.status.info {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.loading {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 720px) {
+  .grid.two {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+}

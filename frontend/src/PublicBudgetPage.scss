@@ -1,0 +1,59 @@
+@use "./App";
+
+.public-budget {
+  min-height: 100vh;
+  padding: 36px 44px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.public-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.public-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.public-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.public-grid .card {
+  animation: none;
+}
+
+.muted {
+  color: var(--muted);
+  margin: 0;
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .public-actions,
+  .status,
+  .loading {
+    display: none !important;
+  }
+
+  .public-budget {
+    padding: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .public-grid {
+    grid-template-columns: 1fr;
+  }
+}

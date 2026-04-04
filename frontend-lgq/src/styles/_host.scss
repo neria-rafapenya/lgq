@@ -1,0 +1,92 @@
+@use "tokens" as *;
+
+.host-shell {
+  min-height: 100vh;
+  background: $lgq-red;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 120px;
+}
+
+.host-nav {
+  padding: 24px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(6px);
+
+  strong {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.85rem;
+  }
+}
+
+.host-hero {
+  padding: 32px 48px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 32px;
+  align-items: center;
+  background: linear-gradient(140deg, rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.08));
+
+  h1 {
+    margin: 0 0 12px;
+    font-size: clamp(2rem, 3vw, 3rem);
+  }
+
+  p {
+    margin: 0 0 16px;
+    max-width: 420px;
+  }
+
+  .host-kicker {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-bottom: 12px;
+  }
+}
+
+.host-hero__mock {
+  height: 280px;
+  border-radius: 24px;
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.22), rgba(0, 0, 0, 0.25));
+  box-shadow: $lgq-shadow;
+  position: relative;
+  overflow: hidden;
+}
+
+.host-hero__mock::after {
+  content: "";
+  position: absolute;
+  inset: 20px;
+  border-radius: 18px;
+  background: repeating-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.45),
+    rgba(255, 255, 255, 0.45) 12px,
+    rgba(0, 0, 0, 0.04) 12px,
+    rgba(0, 0, 0, 0.04) 24px
+  );
+}
+
+.host-content {
+  padding: 0 48px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.host-card {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.18);
+
+  h3 {
+    margin-top: 0;
+  }
+}

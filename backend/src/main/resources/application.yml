@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: lgq-backend
+  config:
+    import: "optional:file:.env[.properties]"
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/validadores?useSSL=false&serverTimezone=UTC}
+    username: ${DB_USER:rpenav}
+    password: ${DB_PASSWORD:pimpamtomalacasitos}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 1
+    locations: classpath:db/migration
+
+server:
+  port: ${PORT:8080}
+
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:8611}
+  seed:
+    enabled: ${SEED_ENABLED:true}
+    file: ${SEED_FILE:../data/validadores.sql}
+    tables: ${SEED_TABLES:category_materials,subcategory_materials,lineitem_materials,lineitem_materials_variants}
+  ai:
+    prompt-file: ${AI_PROMPT_FILE:classpath:prompts/wizard.md}
+    output-format: ${AI_OUTPUT_FORMAT:json_object}
+    max-history: ${AI_MAX_HISTORY:16}
+    temperature: ${AI_TEMPERATURE:0.2}
+
+openai:
+  api-key: ${OPENAI_API_KEY:}
+  model: ${OPENAI_MODEL:gpt-4.1-mini}
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:changeme-please-32-characters-minimum}
+    expiration-minutes: ${JWT_EXPIRATION_MINUTES:720}
+    cookie-name: ${JWT_COOKIE_NAME:LGQ_AUTH}
+    cookie-secure: ${JWT_COOKIE_SECURE:false}

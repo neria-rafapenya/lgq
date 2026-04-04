@@ -2840,14 +2840,6 @@ const WizardShell = () => {
             )}
             <div className="wizard-budget__cta">
               <button
-                className="btn btn-primary"
-                type="button"
-                onClick={handleCalculateBudget}
-                disabled={budgetLoading || !activeProjectId}
-              >
-                Calcular presupuesto
-              </button>
-              <button
                 className="btn btn-tertiary btn-tertiary-dark"
                 type="button"
                 onClick={handleDownloadPdf}

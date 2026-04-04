@@ -209,6 +209,13 @@ export async function fetchMe(): Promise<AuthUser> {
   return request<AuthUser>("/api/auth/me");
 }
 
+export async function updateProfile(name: string): Promise<AuthUser> {
+  return request<AuthUser>("/api/auth/profile", {
+    method: "PUT",
+    body: JSON.stringify({ name }),
+  });
+}
+
 export async function logout(): Promise<void> {
   await request<void>("/api/auth/logout", { method: "POST" });
 }
@@ -238,6 +245,10 @@ export async function createProject(name: string): Promise<{ id: number }> {
 
 export async function fetchProjects(): Promise<ProjectSummary[]> {
   return request<ProjectSummary[]>("/api/projects");
+}
+
+export async function deleteProject(projectId: number): Promise<void> {
+  await request<void>(`/api/projects/${projectId}`, { method: "DELETE" });
 }
 
 export async function fetchCatalogs(): Promise<LgqCatalogSummary[]> {

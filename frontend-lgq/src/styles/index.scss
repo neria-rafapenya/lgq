@@ -85,6 +85,17 @@ textarea,
   border-color: var(--ink-dark);
 }
 
+.btn.ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.btn.ghost.danger {
+  color: #d8342f;
+  border-color: rgba(216, 52, 47, 0.35);
+}
+
 .btn-small {
   padding: 4px 8px;
   font-size: 0.65rem;

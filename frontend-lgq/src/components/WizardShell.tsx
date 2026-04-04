@@ -209,6 +209,34 @@ const WizardShell = () => {
     [projects],
   );
 
+  const loadProjects = useCallback(
+    (preferredId?: number | null) => {
+      fetchProjects()
+        .then((data) => {
+          setProjects(data);
+          window.dispatchEvent(
+            new CustomEvent("lgq:projects-list", { detail: data }),
+          );
+          if (data.length === 0) {
+            setActiveProjectId(null);
+            return;
+          }
+          const stored = Number(
+            window.localStorage.getItem("lgq_active_project_id") || "",
+          );
+          const storedMatch = data.find((project) => project.id === stored)?.id;
+          const preferredMatch =
+            preferredId && data.find((project) => project.id === preferredId)?.id;
+          const selected = preferredMatch ?? storedMatch ?? data[0].id;
+          setActiveProjectId(selected);
+        })
+        .catch(() => {
+          setProjects([]);
+        });
+    },
+    [],
+  );
+
   const [activeSubactIndex, setActiveSubactIndex] = useState(0);
   const activeSubactKey = selectedSubacts[activeSubactIndex];
   const activeSubact = useMemo(
@@ -1038,24 +1066,29 @@ const WizardShell = () => {
   }, [selectedSubacts.length]);
 
   useEffect(() => {
-    fetchProjects()
-      .then((data) => {
-        setProjects(data);
-        if (data.length === 0) {
-          setActiveProjectId(null);
-          return;
-        }
-        const stored = Number(
-          window.localStorage.getItem("lgq_active_project_id") || "",
-        );
-        const selected =
-          data.find((project) => project.id === stored)?.id ?? data[0].id;
-        setActiveProjectId(selected);
-      })
-      .catch(() => {
-        setProjects([]);
-      });
-  }, []);
+    loadProjects();
+  }, [loadProjects]);
+
+  useEffect(() => {
+    const handleOpenProject = (event: Event) => {
+      const detail = (event as CustomEvent<number>).detail;
+      if (typeof detail !== "number" || !Number.isFinite(detail)) return;
+      setActiveProjectId(detail);
+      loadProjects(detail);
+    };
+    const handleRefresh = () => {
+      loadProjects();
+    };
+    window.addEventListener("lgq:open-project", handleOpenProject as EventListener);
+    window.addEventListener("lgq:refresh-projects", handleRefresh);
+    return () => {
+      window.removeEventListener(
+        "lgq:open-project",
+        handleOpenProject as EventListener,
+      );
+      window.removeEventListener("lgq:refresh-projects", handleRefresh);
+    };
+  }, [loadProjects]);
 
   useEffect(() => {
     fetchLgqActions()

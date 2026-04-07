@@ -202,40 +202,35 @@ const WizardShell = () => {
     return map[baseAction] ?? "Sin tipo de reforma seleccionado";
   }, [baseAction]);
 
-  const projectLabel = projectName.trim() || "Proyecto sin nombre";
-
   const projectMap = useMemo(
     () => new Map(projects.map((project) => [project.id, project])),
     [projects],
   );
 
-  const loadProjects = useCallback(
-    (preferredId?: number | null) => {
-      fetchProjects()
-        .then((data) => {
-          setProjects(data);
-          window.dispatchEvent(
-            new CustomEvent("lgq:projects-list", { detail: data }),
-          );
-          if (data.length === 0) {
-            setActiveProjectId(null);
-            return;
-          }
-          const stored = Number(
-            window.localStorage.getItem("lgq_active_project_id") || "",
-          );
-          const storedMatch = data.find((project) => project.id === stored)?.id;
-          const preferredMatch =
-            preferredId && data.find((project) => project.id === preferredId)?.id;
-          const selected = preferredMatch ?? storedMatch ?? data[0].id;
-          setActiveProjectId(selected);
-        })
-        .catch(() => {
-          setProjects([]);
-        });
-    },
-    [],
-  );
+  const loadProjects = useCallback((preferredId?: number | null) => {
+    fetchProjects()
+      .then((data) => {
+        setProjects(data);
+        window.dispatchEvent(
+          new CustomEvent("lgq:projects-list", { detail: data }),
+        );
+        if (data.length === 0) {
+          setActiveProjectId(null);
+          return;
+        }
+        const stored = Number(
+          window.localStorage.getItem("lgq_active_project_id") || "",
+        );
+        const storedMatch = data.find((project) => project.id === stored)?.id;
+        const preferredMatch =
+          preferredId && data.find((project) => project.id === preferredId)?.id;
+        const selected = preferredMatch ?? storedMatch ?? data[0].id;
+        setActiveProjectId(selected);
+      })
+      .catch(() => {
+        setProjects([]);
+      });
+  }, []);
 
   const [activeSubactIndex, setActiveSubactIndex] = useState(0);
   const activeSubactKey = selectedSubacts[activeSubactIndex];
@@ -355,11 +350,6 @@ const WizardShell = () => {
     [selectedSubacts, subacts],
   );
 
-  const totalCatalogItems = useMemo(
-    () => Object.keys(catalogSelections).length,
-    [catalogSelections],
-  );
-
   const selectedCatalogItems = useMemo(() => {
     const names = Object.values(catalogSelections)
       .map((selection) => selection.itemName)
@@ -399,15 +389,12 @@ const WizardShell = () => {
       aiCopyInFlight.current.add(text);
       fetchAiCopy(text)
         .then((copy) => {
-          const finalText =
-            copy && copy.trim().length > 0 ? copy.trim() : text;
+          const finalText = copy && copy.trim().length > 0 ? copy.trim() : text;
           aiCopyCache.current.set(text, finalText);
           setAiCopyMap((prev) => ({ ...prev, [key]: finalText }));
         })
         .catch(() => {
-          setAiCopyMap((prev) =>
-            prev[key] ? prev : { ...prev, [key]: text },
-          );
+          setAiCopyMap((prev) => (prev[key] ? prev : { ...prev, [key]: text }));
         })
         .finally(() => {
           aiCopyInFlight.current.delete(text);
@@ -420,7 +407,12 @@ const WizardShell = () => {
     if (activeStep !== 1) return;
     if (suggestedSubacts.length === 0) return;
     resolveAiCopy("actions-suggest", aiActionsSuggestText);
-  }, [activeStep, suggestedSubacts.length, aiActionsSuggestText, resolveAiCopy]);
+  }, [
+    activeStep,
+    suggestedSubacts.length,
+    aiActionsSuggestText,
+    resolveAiCopy,
+  ]);
 
   useEffect(() => {
     if (activeStep !== 1 || suggestedSubacts.length === 0) {
@@ -791,28 +783,25 @@ const WizardShell = () => {
     [],
   );
 
-  const runTypewriter = useCallback(
-    (messageId: string, fullText: string) => {
-      const existing = typewriterTimers.current.get(messageId);
-      if (existing) {
-        existing();
-      }
-      if (!fullText) return;
-      const cancel = typewriter(
-        fullText,
-        (value) => {
-          setBaseChatMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === messageId ? { ...msg, text: value } : msg,
-            ),
-          );
-        },
-        { speed: 16 },
-      );
-      typewriterTimers.current.set(messageId, cancel);
-    },
-    [],
-  );
+  const runTypewriter = useCallback((messageId: string, fullText: string) => {
+    const existing = typewriterTimers.current.get(messageId);
+    if (existing) {
+      existing();
+    }
+    if (!fullText) return;
+    const cancel = typewriter(
+      fullText,
+      (value) => {
+        setBaseChatMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === messageId ? { ...msg, text: value } : msg,
+          ),
+        );
+      },
+      { speed: 16 },
+    );
+    typewriterTimers.current.set(messageId, cancel);
+  }, []);
 
   useEffect(() => {
     baseChatIds.current = new Set(baseChatMessages.map((msg) => msg.id));
@@ -917,8 +906,6 @@ const WizardShell = () => {
     };
   }, [detailVariant, activeSubactLabel, floorArea, wallArea, parseSizePair]);
 
-  const isPostalValid =
-    postalCode.length === 0 ? true : isCataloniaPostalCode(postalCode);
   const canAdvanceBase =
     projectName.trim().length > 0 &&
     isCataloniaPostalCode(postalCode) &&
@@ -1079,7 +1066,10 @@ const WizardShell = () => {
     const handleRefresh = () => {
       loadProjects();
     };
-    window.addEventListener("lgq:open-project", handleOpenProject as EventListener);
+    window.addEventListener(
+      "lgq:open-project",
+      handleOpenProject as EventListener,
+    );
     window.addEventListener("lgq:refresh-projects", handleRefresh);
     return () => {
       window.removeEventListener(
@@ -1339,26 +1329,6 @@ const WizardShell = () => {
         : [...current, optionKey];
       return { ...prev, [subactKey]: next };
     });
-  };
-
-  const addRoom = () => {
-    setRooms((prev) => [
-      ...prev,
-      { id: `room-${Date.now()}`, name: "", length: "", width: "" },
-    ]);
-  };
-
-  const updateRoom = (
-    roomId: string,
-    patch: Partial<{ name: string; length: string; width: string }>,
-  ) => {
-    setRooms((prev) =>
-      prev.map((room) => (room.id === roomId ? { ...room, ...patch } : room)),
-    );
-  };
-
-  const removeRoom = (roomId: string) => {
-    setRooms((prev) => prev.filter((room) => room.id !== roomId));
   };
 
   const clampStep = (value: number) => Math.min(3, Math.max(0, value));
@@ -1656,23 +1626,26 @@ const WizardShell = () => {
           chatTransitionTimers.current.fadeTimer = null;
         }, CHAT_FADE_MS)
       : null;
-    const delayTimer = window.setTimeout(() => {
-      const finalText = pendingAiCopy.current.get(outgoing.id) ?? prompt;
-      setBaseChatMessages((prev) => {
-        const cleaned = prev.filter((msg) => msg.status !== "fading");
-        const next = [...cleaned];
-        if (pendingUser) {
-          next.push(pendingUser);
+    const delayTimer = window.setTimeout(
+      () => {
+        const finalText = pendingAiCopy.current.get(outgoing.id) ?? prompt;
+        setBaseChatMessages((prev) => {
+          const cleaned = prev.filter((msg) => msg.status !== "fading");
+          const next = [...cleaned];
+          if (pendingUser) {
+            next.push(pendingUser);
+          }
+          next.push(outgoing);
+          return next;
+        });
+        if (pendingUserMessage.current === pendingUser) {
+          pendingUserMessage.current = null;
         }
-        next.push(outgoing);
-        return next;
-      });
-      if (pendingUserMessage.current === pendingUser) {
-        pendingUserMessage.current = null;
-      }
-      runTypewriter(outgoing.id, finalText);
-      chatTransitionTimers.current.delayTimer = null;
-    }, hasPrevious ? CHAT_TRANSITION_DELAY_MS : 0);
+        runTypewriter(outgoing.id, finalText);
+        chatTransitionTimers.current.delayTimer = null;
+      },
+      hasPrevious ? CHAT_TRANSITION_DELAY_MS : 0,
+    );
     chatTransitionTimers.current.fadeTimer = fadeTimer;
     chatTransitionTimers.current.delayTimer = delayTimer;
     fetchAiCopy(prompt)
@@ -1690,12 +1663,7 @@ const WizardShell = () => {
     return () => {
       mounted = false;
     };
-  }, [
-    activeStep,
-    nextBaseQuestion,
-    createChatMessage,
-    runTypewriter,
-  ]);
+  }, [activeStep, nextBaseQuestion, createChatMessage, runTypewriter]);
 
   useEffect(() => {
     if (activeStep !== 0) return;
@@ -1717,20 +1685,22 @@ const WizardShell = () => {
           chatTransitionTimers.current.fadeTimer = null;
         }, CHAT_FADE_MS)
       : null;
-    const delayTimer = window.setTimeout(() => {
-      setBaseChatMessages((prev) => {
-        const cleaned = prev.filter((msg) => msg.status !== "fading");
-        return [...cleaned, pendingUser];
-      });
-      if (pendingUserMessage.current === pendingUser) {
-        pendingUserMessage.current = null;
-      }
-      chatTransitionTimers.current.delayTimer = null;
-    }, hasPrevious ? CHAT_TRANSITION_DELAY_MS : 0);
+    const delayTimer = window.setTimeout(
+      () => {
+        setBaseChatMessages((prev) => {
+          const cleaned = prev.filter((msg) => msg.status !== "fading");
+          return [...cleaned, pendingUser];
+        });
+        if (pendingUserMessage.current === pendingUser) {
+          pendingUserMessage.current = null;
+        }
+        chatTransitionTimers.current.delayTimer = null;
+      },
+      hasPrevious ? CHAT_TRANSITION_DELAY_MS : 0,
+    );
     chatTransitionTimers.current.fadeTimer = fadeTimer;
     chatTransitionTimers.current.delayTimer = delayTimer;
-    return () => {
-    };
+    return () => {};
   }, [activeStep, nextBaseQuestion]);
 
   const handleBaseChatSubmit = async (event: React.FormEvent) => {
@@ -1756,7 +1726,10 @@ const WizardShell = () => {
           setProjectLoadError(null);
           try {
             const created = await createProject(value.trim());
-            setProjects((prev) => [{ id: created.id, name: value.trim() }, ...prev]);
+            setProjects((prev) => [
+              { id: created.id, name: value.trim() },
+              ...prev,
+            ]);
             setActiveProjectId(created.id);
           } catch (error) {
             setProjectLoadError("No pude crear el proyecto.");
@@ -1947,20 +1920,6 @@ const WizardShell = () => {
     } finally {
       setProjectLoading(false);
       setHydratingProject(false);
-    }
-  };
-
-  const handleCalculateBudget = async () => {
-    if (!activeProjectId) return;
-    setBudgetLoading(true);
-    setBudgetError(null);
-    try {
-      const data = await calculateLgqBudget(activeProjectId);
-      setBudgetData(data);
-    } catch (error) {
-      setBudgetError("No pude calcular el presupuesto.");
-    } finally {
-      setBudgetLoading(false);
     }
   };
 
@@ -2701,9 +2660,7 @@ const WizardShell = () => {
                   <h3>Mano de obra</h3>
                   <p>{laborIntroTyped}</p>
                   {laborSummaryText && (
-                    <p className="wizard-labor__summary">
-                      {laborSummaryTyped}
-                    </p>
+                    <p className="wizard-labor__summary">{laborSummaryTyped}</p>
                   )}
                 </div>
               </div>

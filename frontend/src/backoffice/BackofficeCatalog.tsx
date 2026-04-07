@@ -63,7 +63,9 @@ const BackofficeCatalog = () => {
   const [variantDrafts, setVariantDrafts] = useState<
     Record<number, LgqCatalogVariantUpsertRequest>
   >({});
-  const [variantModalItemId, setVariantModalItemId] = useState<number | null>(null);
+  const [variantModalItemId, setVariantModalItemId] = useState<number | null>(
+    null,
+  );
   const [variantModalForm, setVariantModalForm] =
     useState<LgqCatalogVariantUpsertRequest>(emptyVariantForm);
   const [openItems, setOpenItems] = useState<Record<number, boolean>>({});
@@ -168,7 +170,10 @@ const BackofficeCatalog = () => {
       isActive: true,
     };
 
-  const getVariantDraft = (itemId: number, variant: LgqCatalogItem["variants"][number]) =>
+  const getVariantDraft = (
+    _itemId: number,
+    variant: LgqCatalogItem["variants"][number],
+  ) =>
     variantDrafts[variant.id] ?? {
       name: variant.name,
       material: variant.material ?? "",
@@ -182,7 +187,10 @@ const BackofficeCatalog = () => {
       isActive: true,
     };
 
-  const updateItemDraft = (itemId: number, next: LgqCatalogItemUpsertRequest) => {
+  const updateItemDraft = (
+    itemId: number,
+    next: LgqCatalogItemUpsertRequest,
+  ) => {
     setItemDrafts((prev) => ({ ...prev, [itemId]: next }));
   };
 
@@ -343,7 +351,10 @@ const BackofficeCatalog = () => {
                   placeholder="Imagen (URL)"
                   value={newItemForm.imageUrl ?? ""}
                   onChange={(event) =>
-                    setNewItemForm({ ...newItemForm, imageUrl: event.target.value })
+                    setNewItemForm({
+                      ...newItemForm,
+                      imageUrl: event.target.value,
+                    })
                   }
                 />
               </div>
@@ -355,7 +366,10 @@ const BackofficeCatalog = () => {
                 placeholder="Descripción"
                 value={newItemForm.description ?? ""}
                 onChange={(event) =>
-                  setNewItemForm({ ...newItemForm, description: event.target.value })
+                  setNewItemForm({
+                    ...newItemForm,
+                    description: event.target.value,
+                  })
                 }
               />
             </div>
@@ -373,306 +387,357 @@ const BackofficeCatalog = () => {
         </div>
 
         <div className="backoffice-list">
-          {catalog?.items.map((item) => (
+          {catalog?.items.map((item) =>
             (() => {
               const draft = getItemDraft(item);
               return (
-            <div key={item.id} className="backoffice-item">
-              <div className="backoffice-item__header">
-                <div>
-                  <strong>{draft.name || item.name}</strong>
-                  <span>{item.code} · {item.unit}</span>
-                </div>
-                <div className="backoffice-item__actions">
-                  <button
-                    className="btn btn-tertiary btn-tertiary-dark btn-small"
-                    type="button"
-                    onClick={() => handleItemSave(item.id)}
-                  >
-                    Guardar
-                  </button>
-                  <button
-                    className="btn btn-tertiary btn-tertiary-dark btn-small"
-                    type="button"
-                    onClick={() => handleDeleteItem(item.id)}
-                  >
-                    Eliminar
-                  </button>
-                  <button
-                    className="btn btn-primary btn-small"
-                    type="button"
-                    onClick={() => {
-                      setVariantModalItemId(item.id);
-                      setVariantModalForm(emptyVariantForm);
-                    }}
-                  >
-                    Añadir variante
-                  </button>
-                  <button
-                    className="backoffice-item__toggle"
-                    type="button"
-                    aria-label={openItems[item.id] ? "Cerrar artículo" : "Abrir artículo"}
-                    onClick={() => toggleItemOpen(item.id)}
-                  >
-                    {openItems[item.id] ? (
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M6 15l6-6 6 6" />
-                      </svg>
-                    ) : (
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M6 9l6 6 6-6" />
-                      </svg>
-                    )}
-                  </button>
-                </div>
-              </div>
-              {!openItems[item.id] ? null : (
-                <>
-              <div className="backoffice-item__fields">
-                {draft.imageUrl && (
-                  <div className="backoffice-thumb">
-                    <img src={draft.imageUrl} alt={draft.name} />
-                  </div>
-                )}
-                <div className="backoffice-field">
-                  <label className="backoffice-label">Código</label>
-                  <input
-                    className="form-control"
-                    value={draft.code}
-                    onChange={(event) =>
-                      updateItemDraft(item.id, { ...draft, code: event.target.value })
-                    }
-                  />
-                </div>
-                <div className="backoffice-field">
-                  <label className="backoffice-label">Nombre</label>
-                  <input
-                    className="form-control"
-                    value={draft.name}
-                    onChange={(event) =>
-                      updateItemDraft(item.id, { ...draft, name: event.target.value })
-                    }
-                  />
-                </div>
-                <div className="backoffice-field">
-                  <label className="backoffice-label">Unidad</label>
-                  <input
-                    className="form-control"
-                    value={draft.unit}
-                    onChange={(event) =>
-                      updateItemDraft(item.id, { ...draft, unit: event.target.value })
-                    }
-                  />
-                </div>
-                <div className="backoffice-image-field">
-                  <div className="backoffice-field">
-                    <label className="backoffice-label">Imagen (URL)</label>
-                    <input
-                      className="form-control"
-                      placeholder="Imagen (URL)"
-                      value={draft.imageUrl ?? ""}
-                      onChange={(event) =>
-                        updateItemDraft(item.id, { ...draft, imageUrl: event.target.value })
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="backoffice-field">
-                  <label className="backoffice-label">Descripción</label>
-                  <textarea
-                    className="form-control"
-                    value={draft.description ?? ""}
-                    onChange={(event) =>
-                      updateItemDraft(item.id, {
-                        ...draft,
-                        description: event.target.value,
-                      })
-                    }
-                  />
-                </div>
-              </div>
-              <div className="backoffice-variants">
-                {item.variants.map((variant) => (
-                  (() => {
-                    const variantDraft = getVariantDraft(item.id, variant);
-                    return (
-                  <div key={variant.id} className="backoffice-variant">
+                <div key={item.id} className="backoffice-item">
+                  <div className="backoffice-item__header">
                     <div>
-                      {variantDraft.imageUrl && (
-                        <div className="backoffice-variant__thumb">
-                          <img src={variantDraft.imageUrl} alt={variantDraft.name} />
-                        </div>
-                      )}
-                      <div className="backoffice-field">
-                        <label className="backoffice-label">Nombre variante</label>
-                        <input
-                          className="form-control"
-                          value={variantDraft.name}
-                          onChange={(event) =>
-                            updateVariantDraft(variant.id, {
-                              ...variantDraft,
-                              name: event.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                      <div className="backoffice-variant__grid">
-                        <div className="backoffice-field">
-                          <label className="backoffice-label">Imagen variante (URL)</label>
-                          <input
-                            className="form-control"
-                            placeholder="Imagen variante (URL)"
-                            value={variantDraft.imageUrl ?? ""}
-                            onChange={(event) =>
-                              updateVariantDraft(variant.id, {
-                                ...variantDraft,
-                                imageUrl: event.target.value,
-                              })
-                            }
-                          />
-                        </div>
-                        <div className="backoffice-field">
-                          <label className="backoffice-label">Tamaño X (cm)</label>
-                          <input
-                            className="form-control"
-                            type="number"
-                            step={0.01}
-                            placeholder="Ej. 50"
-                            value={variantDraft.sizeXcm ?? ""}
-                            onChange={(event) =>
-                              updateVariantDraft(variant.id, {
-                                ...variantDraft,
-                                sizeXcm: event.target.value
-                                  ? Number(event.target.value)
-                                  : null,
-                              })
-                            }
-                          />
-                        </div>
-                        <div className="backoffice-field">
-                          <label className="backoffice-label">Tamaño Y (cm)</label>
-                          <input
-                            className="form-control"
-                            type="number"
-                            step={0.01}
-                            placeholder="Ej. 50"
-                            value={variantDraft.sizeYcm ?? ""}
-                            onChange={(event) =>
-                              updateVariantDraft(variant.id, {
-                                ...variantDraft,
-                                sizeYcm: event.target.value
-                                  ? Number(event.target.value)
-                                  : null,
-                              })
-                            }
-                          />
-                        </div>
-                        <div className="backoffice-field">
-                          <label className="backoffice-label">Tamaño Z (cm)</label>
-                          <input
-                            className="form-control"
-                            type="number"
-                            step={0.01}
-                            placeholder="Ej. 1"
-                            value={variantDraft.sizeZcm ?? ""}
-                            onChange={(event) =>
-                              updateVariantDraft(variant.id, {
-                                ...variantDraft,
-                                sizeZcm: event.target.value
-                                  ? Number(event.target.value)
-                                  : null,
-                              })
-                            }
-                          />
-                        </div>
-                        <div className="backoffice-field">
-                          <label className="backoffice-label">Material o color</label>
-                          <input
-                            className="form-control"
-                            placeholder="Material o color (hex)"
-                            value={variantDraft.material ?? ""}
-                            onChange={(event) =>
-                              updateVariantDraft(variant.id, {
-                                ...variantDraft,
-                                material: event.target.value,
-                              })
-                            }
-                          />
-                        </div>
-                        <div className="backoffice-field">
-                          <label className="backoffice-label">Calidad</label>
-                          <input
-                            className="form-control"
-                            placeholder="Calidad"
-                            value={variantDraft.quality ?? ""}
-                            onChange={(event) =>
-                              updateVariantDraft(variant.id, {
-                                ...variantDraft,
-                                quality: event.target.value,
-                              })
-                            }
-                          />
-                        </div>
-                        <div className="backoffice-field">
-                          <label className="backoffice-label">Precio</label>
-                          <input
-                            className="form-control"
-                            type="number"
-                            placeholder="Precio"
-                            value={variantDraft.price}
-                            onChange={(event) =>
-                              updateVariantDraft(variant.id, {
-                                ...variantDraft,
-                                price: Number(event.target.value),
-                              })
-                            }
-                          />
-                        </div>
-                      </div>
-                      <label className="backoffice-checkbox">
-                        <input
-                          type="checkbox"
-                          checked={variantDraft.isDefault ?? false}
-                          onChange={(event) =>
-                            updateVariantDraft(variant.id, {
-                              ...variantDraft,
-                              isDefault: event.target.checked,
-                            })
-                          }
-                        />
-                        Variante por defecto
-                      </label>
+                      <strong>{draft.name || item.name}</strong>
+                      <span>
+                        {item.code} · {item.unit}
+                      </span>
                     </div>
                     <div className="backoffice-item__actions">
                       <button
                         className="btn btn-tertiary btn-tertiary-dark btn-small"
                         type="button"
-                        onClick={() => handleVariantSave(variant.id)}
+                        onClick={() => handleItemSave(item.id)}
                       >
                         Guardar
                       </button>
                       <button
                         className="btn btn-tertiary btn-tertiary-dark btn-small"
                         type="button"
-                        onClick={() => handleDeleteVariant(variant.id)}
+                        onClick={() => handleDeleteItem(item.id)}
                       >
                         Eliminar
                       </button>
+                      <button
+                        className="btn btn-primary btn-small"
+                        type="button"
+                        onClick={() => {
+                          setVariantModalItemId(item.id);
+                          setVariantModalForm(emptyVariantForm);
+                        }}
+                      >
+                        Añadir variante
+                      </button>
+                      <button
+                        className="backoffice-item__toggle"
+                        type="button"
+                        aria-label={
+                          openItems[item.id]
+                            ? "Cerrar artículo"
+                            : "Abrir artículo"
+                        }
+                        onClick={() => toggleItemOpen(item.id)}
+                      >
+                        {openItems[item.id] ? (
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M6 15l6-6 6 6" />
+                          </svg>
+                        ) : (
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M6 9l6 6 6-6" />
+                          </svg>
+                        )}
+                      </button>
                     </div>
                   </div>
-                    );
-                  })()
-                ))}
-                {item.variants.length === 0 && (
-                  <p className="backoffice-hint">Sin variantes aún.</p>
-                )}
-              </div>
-                </>
-              )}
-            </div>
+                  {!openItems[item.id] ? null : (
+                    <>
+                      <div className="backoffice-item__fields">
+                        {draft.imageUrl && (
+                          <div className="backoffice-thumb">
+                            <img src={draft.imageUrl} alt={draft.name} />
+                          </div>
+                        )}
+                        <div className="backoffice-field">
+                          <label className="backoffice-label">Código</label>
+                          <input
+                            className="form-control"
+                            value={draft.code}
+                            onChange={(event) =>
+                              updateItemDraft(item.id, {
+                                ...draft,
+                                code: event.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="backoffice-field">
+                          <label className="backoffice-label">Nombre</label>
+                          <input
+                            className="form-control"
+                            value={draft.name}
+                            onChange={(event) =>
+                              updateItemDraft(item.id, {
+                                ...draft,
+                                name: event.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="backoffice-field">
+                          <label className="backoffice-label">Unidad</label>
+                          <input
+                            className="form-control"
+                            value={draft.unit}
+                            onChange={(event) =>
+                              updateItemDraft(item.id, {
+                                ...draft,
+                                unit: event.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="backoffice-image-field">
+                          <div className="backoffice-field">
+                            <label className="backoffice-label">
+                              Imagen (URL)
+                            </label>
+                            <input
+                              className="form-control"
+                              placeholder="Imagen (URL)"
+                              value={draft.imageUrl ?? ""}
+                              onChange={(event) =>
+                                updateItemDraft(item.id, {
+                                  ...draft,
+                                  imageUrl: event.target.value,
+                                })
+                              }
+                            />
+                          </div>
+                        </div>
+                        <div className="backoffice-field">
+                          <label className="backoffice-label">
+                            Descripción
+                          </label>
+                          <textarea
+                            className="form-control"
+                            value={draft.description ?? ""}
+                            onChange={(event) =>
+                              updateItemDraft(item.id, {
+                                ...draft,
+                                description: event.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="backoffice-variants">
+                        {item.variants.map((variant) =>
+                          (() => {
+                            const variantDraft = getVariantDraft(
+                              item.id,
+                              variant,
+                            );
+                            return (
+                              <div
+                                key={variant.id}
+                                className="backoffice-variant"
+                              >
+                                <div>
+                                  {variantDraft.imageUrl && (
+                                    <div className="backoffice-variant__thumb">
+                                      <img
+                                        src={variantDraft.imageUrl}
+                                        alt={variantDraft.name}
+                                      />
+                                    </div>
+                                  )}
+                                  <div className="backoffice-field">
+                                    <label className="backoffice-label">
+                                      Nombre variante
+                                    </label>
+                                    <input
+                                      className="form-control"
+                                      value={variantDraft.name}
+                                      onChange={(event) =>
+                                        updateVariantDraft(variant.id, {
+                                          ...variantDraft,
+                                          name: event.target.value,
+                                        })
+                                      }
+                                    />
+                                  </div>
+                                  <div className="backoffice-variant__grid">
+                                    <div className="backoffice-field">
+                                      <label className="backoffice-label">
+                                        Imagen variante (URL)
+                                      </label>
+                                      <input
+                                        className="form-control"
+                                        placeholder="Imagen variante (URL)"
+                                        value={variantDraft.imageUrl ?? ""}
+                                        onChange={(event) =>
+                                          updateVariantDraft(variant.id, {
+                                            ...variantDraft,
+                                            imageUrl: event.target.value,
+                                          })
+                                        }
+                                      />
+                                    </div>
+                                    <div className="backoffice-field">
+                                      <label className="backoffice-label">
+                                        Tamaño X (cm)
+                                      </label>
+                                      <input
+                                        className="form-control"
+                                        type="number"
+                                        step={0.01}
+                                        placeholder="Ej. 50"
+                                        value={variantDraft.sizeXcm ?? ""}
+                                        onChange={(event) =>
+                                          updateVariantDraft(variant.id, {
+                                            ...variantDraft,
+                                            sizeXcm: event.target.value
+                                              ? Number(event.target.value)
+                                              : null,
+                                          })
+                                        }
+                                      />
+                                    </div>
+                                    <div className="backoffice-field">
+                                      <label className="backoffice-label">
+                                        Tamaño Y (cm)
+                                      </label>
+                                      <input
+                                        className="form-control"
+                                        type="number"
+                                        step={0.01}
+                                        placeholder="Ej. 50"
+                                        value={variantDraft.sizeYcm ?? ""}
+                                        onChange={(event) =>
+                                          updateVariantDraft(variant.id, {
+                                            ...variantDraft,
+                                            sizeYcm: event.target.value
+                                              ? Number(event.target.value)
+                                              : null,
+                                          })
+                                        }
+                                      />
+                                    </div>
+                                    <div className="backoffice-field">
+                                      <label className="backoffice-label">
+                                        Tamaño Z (cm)
+                                      </label>
+                                      <input
+                                        className="form-control"
+                                        type="number"
+                                        step={0.01}
+                                        placeholder="Ej. 1"
+                                        value={variantDraft.sizeZcm ?? ""}
+                                        onChange={(event) =>
+                                          updateVariantDraft(variant.id, {
+                                            ...variantDraft,
+                                            sizeZcm: event.target.value
+                                              ? Number(event.target.value)
+                                              : null,
+                                          })
+                                        }
+                                      />
+                                    </div>
+                                    <div className="backoffice-field">
+                                      <label className="backoffice-label">
+                                        Material o color
+                                      </label>
+                                      <input
+                                        className="form-control"
+                                        placeholder="Material o color (hex)"
+                                        value={variantDraft.material ?? ""}
+                                        onChange={(event) =>
+                                          updateVariantDraft(variant.id, {
+                                            ...variantDraft,
+                                            material: event.target.value,
+                                          })
+                                        }
+                                      />
+                                    </div>
+                                    <div className="backoffice-field">
+                                      <label className="backoffice-label">
+                                        Calidad
+                                      </label>
+                                      <input
+                                        className="form-control"
+                                        placeholder="Calidad"
+                                        value={variantDraft.quality ?? ""}
+                                        onChange={(event) =>
+                                          updateVariantDraft(variant.id, {
+                                            ...variantDraft,
+                                            quality: event.target.value,
+                                          })
+                                        }
+                                      />
+                                    </div>
+                                    <div className="backoffice-field">
+                                      <label className="backoffice-label">
+                                        Precio
+                                      </label>
+                                      <input
+                                        className="form-control"
+                                        type="number"
+                                        placeholder="Precio"
+                                        value={variantDraft.price}
+                                        onChange={(event) =>
+                                          updateVariantDraft(variant.id, {
+                                            ...variantDraft,
+                                            price: Number(event.target.value),
+                                          })
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                  <label className="backoffice-checkbox">
+                                    <input
+                                      type="checkbox"
+                                      checked={variantDraft.isDefault ?? false}
+                                      onChange={(event) =>
+                                        updateVariantDraft(variant.id, {
+                                          ...variantDraft,
+                                          isDefault: event.target.checked,
+                                        })
+                                      }
+                                    />
+                                    Variante por defecto
+                                  </label>
+                                </div>
+                                <div className="backoffice-item__actions">
+                                  <button
+                                    className="btn btn-tertiary btn-tertiary-dark btn-small"
+                                    type="button"
+                                    onClick={() =>
+                                      handleVariantSave(variant.id)
+                                    }
+                                  >
+                                    Guardar
+                                  </button>
+                                  <button
+                                    className="btn btn-tertiary btn-tertiary-dark btn-small"
+                                    type="button"
+                                    onClick={() =>
+                                      handleDeleteVariant(variant.id)
+                                    }
+                                  >
+                                    Eliminar
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })(),
+                        )}
+                        {item.variants.length === 0 && (
+                          <p className="backoffice-hint">Sin variantes aún.</p>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </div>
               );
-            })()
-          ))}
+            })(),
+          )}
         </div>
         {variantModalItemId && (
           <div className="backoffice-modal">
@@ -695,12 +760,17 @@ const BackofficeCatalog = () => {
                     placeholder="Nombre"
                     value={variantModalForm.name}
                     onChange={(event) =>
-                      setVariantModalForm({ ...variantModalForm, name: event.target.value })
+                      setVariantModalForm({
+                        ...variantModalForm,
+                        name: event.target.value,
+                      })
                     }
                   />
                 </div>
                 <div className="backoffice-field">
-                  <label className="backoffice-label">Imagen variante (URL)</label>
+                  <label className="backoffice-label">
+                    Imagen variante (URL)
+                  </label>
                   <input
                     className="form-control"
                     placeholder="Imagen variante (URL)"

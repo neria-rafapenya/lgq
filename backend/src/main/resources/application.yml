@@ -35,3 +35,4 @@ security:
     expiration-minutes: ${JWT_EXPIRATION_MINUTES:720}
     cookie-name: ${JWT_COOKIE_NAME:LGQ_AUTH}
     cookie-secure: ${JWT_COOKIE_SECURE:false}
+    cookie-same-site: ${JWT_COOKIE_SAME_SITE:Lax}

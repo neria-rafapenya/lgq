@@ -23,17 +23,20 @@ public class AuthController {
   private final AuthService authService;
   private final String cookieName;
   private final boolean cookieSecure;
+  private final String cookieSameSite;
   private final long expirationMinutes;
 
   public AuthController(
     AuthService authService,
     @Value("${security.jwt.cookie-name}") String cookieName,
     @Value("${security.jwt.cookie-secure}") boolean cookieSecure,
+    @Value("${security.jwt.cookie-same-site:Lax}") String cookieSameSite,
     @Value("${security.jwt.expiration-minutes}") long expirationMinutes
   ) {
     this.authService = authService;
     this.cookieName = cookieName;
     this.cookieSecure = cookieSecure;
+    this.cookieSameSite = cookieSameSite;
     this.expirationMinutes = expirationMinutes;
   }
 
@@ -58,7 +61,7 @@ public class AuthController {
       .secure(cookieSecure)
       .path("/")
       .maxAge(Duration.ZERO)
-      .sameSite("Lax")
+      .sameSite(cookieSameSite)
       .build();
     response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
   }
@@ -88,7 +91,7 @@ public class AuthController {
       .secure(cookieSecure)
       .path("/")
       .maxAge(Duration.ofMinutes(expirationMinutes))
-      .sameSite("Lax")
+      .sameSite(cookieSameSite)
       .build();
     response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
   }

@@ -1,6 +1,7 @@
 package com.lgq.budget.security;
 
 import com.lgq.budget.audit.AccessLogFilter;
+import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +30,8 @@ public class SecurityConfig {
       .cors(Customizer.withDefaults())
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
       .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/api/auth/**", "/api/health", "/api/public/**").permitAll()
+        .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
+        .requestMatchers("/api/auth/**", "/api/health", "/api/public/**", "/error").permitAll()
         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
         .anyRequest().authenticated()
       )

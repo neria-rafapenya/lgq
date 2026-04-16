@@ -8,11 +8,6 @@ spring:
     username: ${DB_USER:rpenav}
     password: ${DB_PASSWORD:pimpamtomalacasitos}
     driver-class-name: com.mysql.cj.jdbc.Driver
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
-    baseline-version: 1
-    locations: classpath:db/migration
 
 server:
   port: ${PORT:8080}
